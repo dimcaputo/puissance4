@@ -10,21 +10,25 @@ class Game:
         self.choose_colour()
         while self.ongoing:
             self.play_turn()
+            self.change_player()
         
     def choose_colour(self):
         print('Bienvenue! Vous êtes le premier joueur !')
         print(self.board)
         chosen_colour = input('Veuillez choisir une couleur, Jaune [J] ou Rouge [R]: ')
-        while not type(chosen_colour) == str:
-            chosen_colour = input('Veuillez entrer une chaine de caractère ! Pas de chiffres, pas de caractères spéciaux : ')
-        self.player_colour = chosen_colour[0].upper() + chosen_colour[1:].lower()
+        while not (chosen_colour.upper() == 'J' or chosen_colour.upper() == 'R'):
+            chosen_colour = input('Veuillez entrer J ou R : ')
+        self.player_colour = chosen_colour
 
     def play_turn(self):
         print(f'Au tour des {self.player_colour}')
         self.step += 1
         chosen_col = int(self.enter_and_check_col())
-        new_pawn = Pawn(id=self.step, colour=self.player_colour, position=chosen_col)
-        self.place_pawn_on_board(new_pawn)
+        empty_spot = self.find_empty_spot(chosen_col)
+        new_pawn = Pawn(id=self.step, colour=self.player_colour, position=(empty_spot,chosen_col))
+        self.place_pawn_on_board(new_pawn, chosen_col)
+        self.check_if_end()
+        
 
     def enter_and_check_col(self):
         chosen_col = input('Dans quelle colonne voulez-vous placer votre pion ? : ') 
@@ -33,10 +37,26 @@ class Game:
         
         while not ' ' in [self.board.df.loc[i, eval(chosen_col)] for i in self.board.df.index]: #Checks that the colomn contains at least an empty spot
             chosen_col = int(input('La colonne est pleine ! Veuillez en choisir une autre'))
-        print('Plaçons le pion.')
         return chosen_col
 
-    def place_pawn_on_board(self, pawn):
+    def find_empty_spot(self, col):
+        list_value_series = list(self.board.df[col].values)
+        for i in range(len(list_value_series)-1, -1, -1):
+            if list_value_series[i] == ' ':
+                return i
+
+    
+    def place_pawn_on_board(self, pawn, col):
+        print('Plaçons le pion.')
         pass
 
+
+    def change_player(self):
+        if self.player_colour == 'J':
+            self.player_colour = 'R'
+        else:
+            self.player_colour = 'J'
+
+    def check_if_end(self):
+        pass
 myGame = Game()
