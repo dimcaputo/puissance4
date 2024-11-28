@@ -11,6 +11,7 @@ class Game:
         while self.ongoing:
             self.play_turn()
             self.change_player()
+        self.display_winner()
         
     def choose_colour(self):
         print('Bienvenue! Vous êtes le premier joueur !')
@@ -32,11 +33,20 @@ class Game:
 
     def enter_and_check_col(self):
         chosen_col = input('Dans quelle colonne voulez-vous placer votre pion ? : ') 
-        while not isinstance(eval(chosen_col), int) and eval(chosen_col) not in range(1,8): #Checks that the value entered is an integer between 1 and 7
-            chosen_col = int(input('Veuillez entrer un chiffre entre 1 et 7: '))
+        stop = False
+        while stop == False:
+            try:
+                chosen_col = int(chosen_col)
+                if 0 < chosen_col <= 7:
+                    stop = True
+                else:
+                    raise ValueError
+            except:
+                chosen_col = input('Veuillez entrer un chiffre entre 1 et 7: ')
+                
         
-        while not ' ' in [self.board.df.loc[i, eval(chosen_col)] for i in self.board.df.index]: #Checks that the colomn contains at least an empty spot
-            chosen_col = int(input('La colonne est pleine ! Veuillez en choisir une autre'))
+        #while not ' ' in [self.board.df.loc[i, eval(chosen_col)] for i in self.board.df.index]: #Checks that the colomn contains at least an empty spot
+        #    chosen_col = int(input('La colonne est pleine ! Veuillez en choisir une autre'))
         return chosen_col
 
     def find_empty_spot(self, col):
@@ -45,12 +55,10 @@ class Game:
             if list_value_series[i] == ' ':
                 return i+1
 
-    
     def place_pawn_on_board(self, pawn):
         print('Plaçons le pion.')
         self.board.df.loc[pawn.get_position()[0], pawn.get_position()[1]] = pawn.get_colour()
         print(self.board)
-
 
     def change_player(self):
         if self.player_colour == 'J':
@@ -59,5 +67,22 @@ class Game:
             self.player_colour = 'J'
 
     def check_if_end(self):
-        pass
+        self.ongoing = not self.check_if_winner() and not self.check_if_full()
+
+    def check_if_winner(self):
+        return False
+
+    def check_if_full(self):
+        if len(Pawn.list_of_pawns) == 42:
+            bool_full = True
+        else:
+            bool_full = False
+        return bool_full
+
+    def display_winner(self):
+        if self.check_if_winner():
+            print(f'Congratulations !! The winner is {self.player_colour}')
+        elif self.check_if_full():
+            print("Too bad! Nobody won! :'(")
+
 myGame = Game()
