@@ -75,7 +75,6 @@ class Game:
 
     def check_if_winner(self, pawn):
         dict_counts = self.find_neighbours(pawn)
-        print(dict_counts)
         for k,v in dict_counts.items():
             if v >= 4:
                 return True
