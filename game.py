@@ -31,7 +31,7 @@ class Game:
         while not isinstance(eval(chosen_col), int) and eval(chosen_col) not in range(1,8): #Checks that the value entered is an integer between 1 and 7
             chosen_col = int(input('Veuillez entrer un chiffre entre 1 et 7: '))
         
-        while not ' ' in [self.board.df.loc[i, eval(chosen_col] for i in self.board.df.index]: #Checks that the colomn contains at least an empty spot
+        while not ' ' in [self.board.df.loc[i, eval(chosen_col)] for i in self.board.df.index]: #Checks that the colomn contains at least an empty spot
             chosen_col = int(input('La colonne est pleine ! Veuillez en choisir une autre'))
         print('Plaçons le pion.')
         return chosen_col
