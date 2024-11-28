@@ -96,15 +96,14 @@ class Game:
         dict_count_direction = {k:0 for k in dict_direction.keys()}
         for key in dict_direction.keys():
             for value in dict_direction[key]:
-                dict_count_direction[key] += self.find_neighbours_in_one_direction(pawn.get_position(), value, pawn)
-        pass
+                dict_count_direction[key] += self.find_neighbours_in_one_direction(pawn.get_position(), value, pawn, 0)
+        
 
-    def find_neighbours_in_one_direction(self, position_of_pawn, tup, pawn):
-        count = 0
+    def find_neighbours_in_one_direction(self, position_of_pawn, tup, pawn, count):
         ind,col = position_of_pawn[0] + tup[0], position_of_pawn[1] + tup[1]
         if self.board.df.loc[ind,col] == pawn.get_colour():
             count += 1
-            self.find_neighbours_in_one_direction((ind,col), tup, pawn)
-        pass
+            self.find_neighbours_in_one_direction((ind,col), tup, pawn, count)
+        return count
 
 myGame = Game()
