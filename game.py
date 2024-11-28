@@ -28,7 +28,7 @@ class Game:
         empty_spot = self.find_empty_spot(chosen_col)
         new_pawn = Pawn(id=self.step, colour=self.player_colour, position=(empty_spot,chosen_col))
         self.place_pawn_on_board(new_pawn)
-        self.check_if_end()
+        self.check_if_end(new_pawn)
         
 
     def enter_and_check_col(self):
@@ -38,15 +38,17 @@ class Game:
             try:
                 chosen_col = int(chosen_col)
                 if 0 < chosen_col <= 7:
-                    stop = True
+                    try:
+                        if ' ' in [self.board.df.loc[i, chosen_col] for i in self.board.df.index]:
+                            stop = True
+                        else:
+                            raise ValueError
+                    except:
+                        chosen_col = input('La colonne est pleine ! Veuillez en choisir une autre: ')
                 else:
                     raise ValueError
             except:
                 chosen_col = input('Veuillez entrer un chiffre entre 1 et 7: ')
-                
-        
-        #while not ' ' in [self.board.df.loc[i, eval(chosen_col)] for i in self.board.df.index]: #Checks that the colomn contains at least an empty spot
-        #    chosen_col = int(input('La colonne est pleine ! Veuillez en choisir une autre'))
         return chosen_col
 
     def find_empty_spot(self, col):
@@ -66,10 +68,11 @@ class Game:
         else:
             self.player_colour = 'J'
 
-    def check_if_end(self):
-        self.ongoing = not self.check_if_winner() and not self.check_if_full()
+    def check_if_end(self, pawn):
+        self.ongoing = not self.check_if_winner(pawn) and not self.check_if_full()
 
-    def check_if_winner(self):
+    def check_if_winner(self, pawn):
+        self.find_neighbours(pawn)
         return False
 
     def check_if_full(self):
@@ -84,5 +87,24 @@ class Game:
             print(f'Congratulations !! The winner is {self.player_colour}')
         elif self.check_if_full():
             print("Too bad! Nobody won! :'(")
+
+    def find_neighbours(self, pawn):
+        dict_direction = {'horizontale':[(0,y) for y in [-1,1]], 
+                          'vertical':[(x,0) for x in [-1,1]], 
+                          'diagonale_croissante':[(x,y) for x in [-1,1] for y in [-1,1] if x == y],
+                          'diagonale_decroissante':[(x,y) for x in [-1,1] for y in [-1,1] if x != y]}
+        dict_count_direction = {k:0 for k in dict_direction.keys()}
+        # for key in dict_direction.keys():
+        #     for value in dict_direction[key]:
+        #         dict_count_direction[key] += self.find_neighbours_in_one_direction(pawn.get_position(), value)
+        pass
+
+    # def find_neighbours_in_one_direction(self, position_of_pawn, tup):
+    #     count = 0
+    #     ind,col = position_of_pawn[0] + tup[0], position_of_pawn[1] + tup[1]
+    #     if self.board.df.loc[ind,col] == pawn.get_colour():
+    #         count += 1
+    #         self.find_neighbours_in_one_direction(,(ind,col))
+    #     pass
 
 myGame = Game()
