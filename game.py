@@ -31,8 +31,6 @@ class Game:
         if self.ongoing:
             self.change_player()
 
-        
-
     def enter_and_check_col(self):
         chosen_col = input('Dans quelle colonne voulez-vous placer votre pion ? : ') 
         stop = False
@@ -106,7 +104,6 @@ class Game:
                 dict_count_direction[key] += self.find_neighbours_in_one_direction(pawn.get_position(), item, self.player_colour, 0)
         return dict_count_direction
         
-
     def find_neighbours_in_one_direction(self, position, tup, colour, count):
         ind,col = position[0] + tup[0], position[1] + tup[1]
         if ind < 1 or ind > 6 or col < 1 or col > 7:
@@ -118,4 +115,5 @@ class Game:
             return self.find_neighbours_in_one_direction((ind,col), tup, colour, count)
             
 
-myGame = Game()
+if __name__ == '__main__':
+    myGame = Game()
