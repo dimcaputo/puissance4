@@ -38,6 +38,4 @@ class Board:
             str_to_print += '\n' + ''.join(self.dico_board[i]) + '\n' + ''.join(self.dico_board['sep'])
         return str_to_print
 
-myBoard = Board()
-print(myBoard)
 

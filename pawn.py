@@ -1,10 +1,10 @@
 class Pawn:
     '''Represent the pawns used during the game'''
-    def __init__(self, id:int, colour:str, position:tuple, is_on_board=False:bool):
-        self.set_id() # type: ignore
-        self.set_colour()
-        self.set_position()
-        self.is_on_board()
+    def __init__(self, id:int, colour:str, position:int, is_on_board=False):
+        self.set_id(id)
+        self.set_colour(colour)
+        self.set_position(position)
+        self.set_is_on_board(is_on_board)
 
     def set_id(self, id):
         self.__id = id
@@ -13,7 +13,8 @@ class Pawn:
         self.__colour = colour
 
     def set_position(self, position):
-        self.__position = position
+        self.__col = position
+        self.__row = 6
     
     def set_is_on_board(self, is_on_board):
         self.__is_on_board = is_on_board
@@ -25,7 +26,7 @@ class Pawn:
         return self.__colour
     
     def get_position(self):
-        return self.__position
+        return self.__row, self.__col
     
     def get_is_on_board(self):
         return self.__is_on_board
