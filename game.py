@@ -94,17 +94,17 @@ class Game:
                           'diagonale_croissante':[(x,y) for x in [-1,1] for y in [-1,1] if x == y],
                           'diagonale_decroissante':[(x,y) for x in [-1,1] for y in [-1,1] if x != y]}
         dict_count_direction = {k:0 for k in dict_direction.keys()}
-        # for key in dict_direction.keys():
-        #     for value in dict_direction[key]:
-        #         dict_count_direction[key] += self.find_neighbours_in_one_direction(pawn.get_position(), value)
+        for key in dict_direction.keys():
+            for value in dict_direction[key]:
+                dict_count_direction[key] += self.find_neighbours_in_one_direction(pawn.get_position(), value, pawn)
         pass
 
-    # def find_neighbours_in_one_direction(self, position_of_pawn, tup):
-    #     count = 0
-    #     ind,col = position_of_pawn[0] + tup[0], position_of_pawn[1] + tup[1]
-    #     if self.board.df.loc[ind,col] == pawn.get_colour():
-    #         count += 1
-    #         self.find_neighbours_in_one_direction(,(ind,col))
-    #     pass
+    def find_neighbours_in_one_direction(self, position_of_pawn, tup, pawn):
+        count = 0
+        ind,col = position_of_pawn[0] + tup[0], position_of_pawn[1] + tup[1]
+        if self.board.df.loc[ind,col] == pawn.get_colour():
+            count += 1
+            self.find_neighbours_in_one_direction((ind,col), tup, pawn)
+        pass
 
 myGame = Game()
