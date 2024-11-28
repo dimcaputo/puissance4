@@ -26,7 +26,7 @@ class Game:
         chosen_col = int(self.enter_and_check_col())
         empty_spot = self.find_empty_spot(chosen_col)
         new_pawn = Pawn(id=self.step, colour=self.player_colour, position=(empty_spot,chosen_col))
-        self.place_pawn_on_board(new_pawn, chosen_col)
+        self.place_pawn_on_board(new_pawn)
         self.check_if_end()
         
 
@@ -43,12 +43,13 @@ class Game:
         list_value_series = list(self.board.df[col].values)
         for i in range(len(list_value_series)-1, -1, -1):
             if list_value_series[i] == ' ':
-                return i
+                return i+1
 
     
-    def place_pawn_on_board(self, pawn, col):
+    def place_pawn_on_board(self, pawn):
         print('Plaçons le pion.')
-        pass
+        self.board.df.loc[pawn.get_position()[0], pawn.get_position()[1]] = pawn.get_colour()
+        print(self.board)
 
 
     def change_player(self):
