@@ -11,6 +11,9 @@ class Game:
         while self.ongoing:
             self.play_turn()
         self.display_winner()
+        while input('Voulez vous jouer à nouveau? [Y]: ') == 'Y' or input('Voulez vous jouer à nouveau? [Y]: ') == 'y':
+            new_game = Game()
+
         
     def choose_colour(self):
         print('Bienvenue! Vous êtes le premier joueur !\n')
