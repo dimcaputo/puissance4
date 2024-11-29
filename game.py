@@ -11,7 +11,7 @@ class Game:
         while self.ongoing:
             self.play_turn()
         self.display_winner()
-        while input('Voulez vous jouer à nouveau? [Y]: ') == 'Y' or input('Voulez vous jouer à nouveau? [Y]: ') == 'y':
+        while input('Voulez vous jouer à nouveau? [Y]: ') == 'Y':
             new_game = Game()
 
         
@@ -33,6 +33,7 @@ class Game:
         empty_spot = self.find_empty_spot(chosen_col)
         new_pawn = Pawn(id=self.step, colour=self.player_colour, position=(empty_spot,chosen_col))
         self.place_pawn_on_board(new_pawn)
+        print(self.board)
         self.check_if_finished(new_pawn)
         if self.ongoing:
             self.change_player()
@@ -64,9 +65,8 @@ class Game:
                 return i+1
 
     def place_pawn_on_board(self, pawn):
-        print('\nPlaçons le pion.')
+        #print('\nPlaçons le pion.')
         self.board.df.loc[pawn.get_position()[0], pawn.get_position()[1]] = pawn.get_colour()
-        print(self.board)
 
     def change_player(self):
         if self.player_colour == 'J':
@@ -83,8 +83,12 @@ class Game:
         dict_counts = self.find_neighbours(pawn)
         for k,v in dict_counts.items():
             pawn.set_me_and_neighbours(v)
-            if len(v) >= 4:
-                return True
+        if len(pawn.get_me_and_neighbours()) >= 4:
+            for p in pawn.get_me_and_neighbours():
+                p.set_colour('B')
+                self.place_pawn_on_board(p)
+            print(self.board)
+            return True
 
     def check_if_full(self):
         if len(Pawn.list_of_pawns) == 42:

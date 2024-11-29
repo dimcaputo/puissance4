@@ -32,6 +32,8 @@ class Board:
                     lst_for_row.append('\033[33m' + ' ' + u'\u263B' + ' ' + '\033[0m')
                 elif self.df.loc[i,j] == 'R':
                     lst_for_row.append('\033[31m' + ' ' + u'\u263B' + ' ' + '\033[0m')
+                elif self.df.loc[i,j] == 'B':
+                    lst_for_row.append('\033[36m' + ' ' + u'\u263B' + ' ' + '\033[0m')
                 else:
                     lst_for_row.append(self.df.loc[i,j]*3)
                 lst_for_row.append(u'\u23D0')
