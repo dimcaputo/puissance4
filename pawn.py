@@ -41,7 +41,7 @@ class Pawn:
     def get_is_on_board(self):
         return self.__is_on_board
     
-    def get_neighbours(self):
+    def get_me_and_neighbours(self):
         return self.__me_and_neighbours
     
     def get_pawn_from_location(position:tuple):
