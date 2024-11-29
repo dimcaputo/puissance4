@@ -117,8 +117,7 @@ class Game:
             return count
         else:
             count += 1
-            return self.find_neighbours_in_one_direction((ind,col), tup, colour, count)
-            
+            return self.find_neighbours_in_one_direction((ind,col), tup, colour, count)        
 
 if __name__ == '__main__':
     myGame = Game()
