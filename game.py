@@ -13,15 +13,18 @@ class Game:
         self.display_winner()
         
     def choose_colour(self):
-        print('Bienvenue! Vous êtes le premier joueur !')
+        print('Bienvenue! Vous êtes le premier joueur !\n')
         print(self.board)
-        chosen_colour = input('Veuillez choisir une couleur, Jaune [J] ou Rouge [R]: ')
+        chosen_colour = input('\nVeuillez choisir une couleur, Jaune [J] ou Rouge [R]: ')
         while not (chosen_colour == 'J' or chosen_colour == 'R'):
-            chosen_colour = input('Veuillez entrer J ou R : ')
+            chosen_colour = input('\nVeuillez entrer J ou R : ')
         self.player_colour = chosen_colour
 
     def play_turn(self):
-        print(f'Au tour des {self.player_colour}')
+        if self.player_colour == 'J':
+            print('\nAu tour des jaunes')
+        else:
+            print('\nAu tour des rouges')
         self.step += 1
         chosen_col = int(self.enter_and_check_col())
         empty_spot = self.find_empty_spot(chosen_col)
@@ -32,7 +35,7 @@ class Game:
             self.change_player()
 
     def enter_and_check_col(self):
-        chosen_col = input('Dans quelle colonne voulez-vous placer votre pion ? : ') 
+        chosen_col = input('\nDans quelle colonne voulez-vous placer votre pion ? : ') 
         stop = False
         while stop == False:
             try:
@@ -44,11 +47,11 @@ class Game:
                         else:
                             raise ValueError
                     except:
-                        chosen_col = input('La colonne est pleine ! Veuillez en choisir une autre: ')
+                        chosen_col = input('\nLa colonne est pleine ! Veuillez en choisir une autre: ')
                 else:
                     raise ValueError
             except:
-                chosen_col = input('Veuillez entrer un chiffre entre 1 et 7: ')
+                chosen_col = input('\nVeuillez entrer un chiffre entre 1 et 7: ')
         return chosen_col
 
     def find_empty_spot(self, col):
@@ -58,7 +61,7 @@ class Game:
                 return i+1
 
     def place_pawn_on_board(self, pawn):
-        print('Plaçons le pion.')
+        print('\nPlaçons le pion.')
         self.board.df.loc[pawn.get_position()[0], pawn.get_position()[1]] = pawn.get_colour()
         print(self.board)
 
@@ -75,7 +78,6 @@ class Game:
 
     def check_if_winner(self, pawn):
         dict_counts = self.find_neighbours(pawn)
-        print(dict_counts)
         for k,v in dict_counts.items():
             if v >= 4:
                 return True
@@ -89,9 +91,12 @@ class Game:
 
     def display_winner(self):
         if self.check_if_full():
-            print("Too bad! Nobody won! :'(")
+            print("\nToo bad! Nobody won! :'(")
         else:
-            print(f'Congratulations !! The winner is {self.player_colour}')
+            if self.player_colour == 'J':
+                print('\nBravo !! Les jaunes ont gagné !')
+            else:
+                print('\nBravo !! Les rouges ont gagné !')
 
     def find_neighbours(self, pawn):
         dict_direction = {'horizontale':[(0,y) for y in [-1,1]], 
