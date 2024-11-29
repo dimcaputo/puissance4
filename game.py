@@ -11,7 +11,7 @@ class Game:
         while self.ongoing:
             self.play_turn()
         self.display_winner()
-        while input('Voulez vous jouer à nouveau? [Y]: ') == 'Y' or input('Voulez vous jouer à nouveau? [Y]: ') == 'y':
+        while input('Voulez vous jouer à nouveau? [Y]: ') == 'Y':
             new_game = Game()
 
         
@@ -33,6 +33,7 @@ class Game:
         empty_spot = self.find_empty_spot(chosen_col)
         new_pawn = Pawn(id=self.step, colour=self.player_colour, position=(empty_spot,chosen_col))
         self.place_pawn_on_board(new_pawn)
+        print(self.board)
         self.check_if_finished(new_pawn)
         if self.ongoing:
             self.change_player()
@@ -64,9 +65,8 @@ class Game:
                 return i+1
 
     def place_pawn_on_board(self, pawn):
-        print('\nPlaçons le pion.')
+        #print('\nPlaçons le pion.')
         self.board.df.loc[pawn.get_position()[0], pawn.get_position()[1]] = pawn.get_colour()
-        print(self.board)
 
     def change_player(self):
         if self.player_colour == 'J':
@@ -79,11 +79,16 @@ class Game:
         if is_finished:
             self.ongoing = not is_finished
 
-    def check_if_winner(self, pawn):
+    def check_if_winner(self, pawn):                 #Check if the pawn made the player win and also stores the list of pawn and neighbours
         dict_counts = self.find_neighbours(pawn)
         for k,v in dict_counts.items():
-            if v >= 4:
-                return True
+            pawn.set_me_and_neighbours(v)
+        if len(pawn.get_me_and_neighbours()) >= 4:
+            for p in pawn.get_me_and_neighbours():
+                p.set_colour('B')
+                self.place_pawn_on_board(p)
+            print(self.board)
+            return True
 
     def check_if_full(self):
         if len(Pawn.list_of_pawns) == 42:
@@ -106,21 +111,21 @@ class Game:
                           'verticale':[(x,0) for x in [-1,1]], 
                           'diagonale_croissante':[(x,y) for x in [-1,1] for y in [-1,1] if x == y],
                           'diagonale_decroissante':[(x,y) for x in [-1,1] for y in [-1,1] if x != y]}
-        dict_count_direction = {k:1 for k in dict_direction.keys()}
+        dict_count_direction = {k:[] for k in dict_direction.keys()}
         for key in dict_direction.keys():
             for item in dict_direction[key]:
-                dict_count_direction[key] += self.find_neighbours_in_one_direction(pawn.get_position(), item, self.player_colour, 0)
+                dict_count_direction[key].extend(self.find_neighbours_in_one_direction(pawn, item, pawn.get_colour(), [pawn]))
+            dict_count_direction[key] = list(set([x for x in dict_count_direction[key] if not x == None]))
         return dict_count_direction
         
-    def find_neighbours_in_one_direction(self, position, tup, colour, count):
-        ind,col = position[0] + tup[0], position[1] + tup[1]
-        if ind < 1 or ind > 6 or col < 1 or col > 7:
-            return count
-        elif self.board.df.loc[ind,col] != colour:
-            return count
-        else:
-            count += 1
-            return self.find_neighbours_in_one_direction((ind,col), tup, colour, count)        
+    def find_neighbours_in_one_direction(self, pawn, tup, colour, lst_temp:list):
+        ind,col = pawn.get_position()[0] + tup[0], pawn.get_position()[1] + tup[1]
+        new_pawn = Pawn.get_pawn_from_location((ind,col))
+        if isinstance(new_pawn, Pawn) and new_pawn.get_colour() == pawn.get_colour():
+            lst_temp.append(new_pawn)
+            self.find_neighbours_in_one_direction(new_pawn, tup, new_pawn.get_colour(), lst_temp)
+        return lst_temp
+            
 
 if __name__ == '__main__':
     myGame = Game()
