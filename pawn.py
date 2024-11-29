@@ -32,3 +32,10 @@ class Pawn:
     
     def get_is_on_board(self):
         return self.__is_on_board
+    
+    def get_pawn_from_location(position:tuple):
+        '''Careful! Return None if no pawn is found'''
+        for pawn in Pawn.list_of_pawns:
+            if pawn.get_position() == position:
+                return pawn
+

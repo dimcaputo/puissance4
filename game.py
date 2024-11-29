@@ -82,7 +82,7 @@ class Game:
     def check_if_winner(self, pawn):
         dict_counts = self.find_neighbours(pawn)
         for k,v in dict_counts.items():
-            if v >= 4:
+            if len(v) >= 4:
                 return True
 
     def check_if_full(self):
@@ -106,21 +106,21 @@ class Game:
                           'verticale':[(x,0) for x in [-1,1]], 
                           'diagonale_croissante':[(x,y) for x in [-1,1] for y in [-1,1] if x == y],
                           'diagonale_decroissante':[(x,y) for x in [-1,1] for y in [-1,1] if x != y]}
-        dict_count_direction = {k:1 for k in dict_direction.keys()}
+        dict_count_direction = {k:[] for k in dict_direction.keys()}
         for key in dict_direction.keys():
             for item in dict_direction[key]:
-                dict_count_direction[key] += self.find_neighbours_in_one_direction(pawn.get_position(), item, self.player_colour, 0)
+                dict_count_direction[key].extend(self.find_neighbours_in_one_direction(pawn, item, pawn.get_colour(), [pawn]))
+            dict_count_direction[key] = list(set([x for x in dict_count_direction[key] if not x == None]))
         return dict_count_direction
         
-    def find_neighbours_in_one_direction(self, position, tup, colour, count):
-        ind,col = position[0] + tup[0], position[1] + tup[1]
-        if ind < 1 or ind > 6 or col < 1 or col > 7:
-            return count
-        elif self.board.df.loc[ind,col] != colour:
-            return count
-        else:
-            count += 1
-            return self.find_neighbours_in_one_direction((ind,col), tup, colour, count)        
+    def find_neighbours_in_one_direction(self, pawn, tup, colour, lst_temp:list):
+        ind,col = pawn.get_position()[0] + tup[0], pawn.get_position()[1] + tup[1]
+        new_pawn = Pawn.get_pawn_from_location((ind,col))
+        if isinstance(new_pawn, Pawn) and new_pawn.get_colour() == pawn.get_colour():
+            lst_temp.append(new_pawn)
+            self.find_neighbours_in_one_direction(new_pawn, tup, new_pawn.get_colour(), lst_temp)
+        return lst_temp
+            
 
 if __name__ == '__main__':
     myGame = Game()
