@@ -21,7 +21,7 @@ class Game:
         self.player_colour = chosen_colour
 
     def play_turn(self):
-        if self.player_colour = 'J'
+        if self.player_colour == 'J':
             print('\nAu tour des jaunes')
         else:
             print('\nAu tour des rouges')
@@ -93,10 +93,10 @@ class Game:
         if self.check_if_full():
             print("\nToo bad! Nobody won! :'(")
         else:
-            if self.player_colour = 'J'
-            print('\nBravo !! Les jaunes ont gagné !')
-        else:
-            print('\nBravo !! Les rouges ont gagné !')
+            if self.player_colour == 'J':
+                print('\nBravo !! Les jaunes ont gagné !')
+            else:
+                print('\nBravo !! Les rouges ont gagné !')
 
     def find_neighbours(self, pawn):
         dict_direction = {'horizontale':[(0,y) for y in [-1,1]], 
