@@ -79,9 +79,10 @@ class Game:
         if is_finished:
             self.ongoing = not is_finished
 
-    def check_if_winner(self, pawn):
+    def check_if_winner(self, pawn):                 #Check if the pawn made the player win and also stores the list of pawn and neighbours
         dict_counts = self.find_neighbours(pawn)
         for k,v in dict_counts.items():
+            pawn.set_me_and_neighbours(v)
             if len(v) >= 4:
                 return True
 
