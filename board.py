@@ -29,9 +29,9 @@ class Board:
             lst_for_row.append(f'  |')
             for j in self.df.columns:
                 if self.df.loc[i,j] == 'J':
-                    lst_for_row.append('\033[43m' + '   ' + '\033[0m')
+                    lst_for_row.append('\033[33m' + ' ' + u'\u263B' + ' ' + '\033[0m')
                 elif self.df.loc[i,j] == 'R':
-                    lst_for_row.append('\033[41m' + '   ' + '\033[0m')
+                    lst_for_row.append('\033[31m' + ' ' + u'\u263B' + ' ' + '\033[0m')
                 else:
                     lst_for_row.append(self.df.loc[i,j]*3)
                 lst_for_row.append('|')
